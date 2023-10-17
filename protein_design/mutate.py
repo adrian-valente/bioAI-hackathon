@@ -3,9 +3,11 @@ import copy
 from itertools import combinations
 from re import M
 import typing
+from typing import List
 import torch
 import numpy as np
 import random
+from transformers import  AutoTokenizer, AutoModel
 
 def numbering_to_chains(numbering):
     """
@@ -26,7 +28,7 @@ def numbering_to_chains(numbering):
         sepereated_sequences.append(heavy_light)
     return sepereated_sequences
 
-def masked_sequences_to_mutated_sequences(masked_sequences, model, tokenizer):
+def masked_sequences_to_mutated_sequences(masked_sequences : List[str], model : AutoModel, tokenizer : AutoTokenizer) -> List[str]:
     """
     Takes in a sequence with <mask> tokens and replaces them with the most likely tokens. One sequence at a time.
     """
@@ -53,14 +55,8 @@ def masked_sequences_to_mutated_sequences(masked_sequences, model, tokenizer):
         mutated_sequences.append(mutated_sequence)
     return mutated_sequences
 
-def generate_all_maskings(sequences, mutateable_list, mut_distance=1):
-    """
-    Given a seqeunce in the format of a list of tuples, each tuple (amino_acid : str, mutateable : bool) returns a list of masked sequences. Return all sequences with a mutational
-    distance of mut_distance away from the original sequence. Only mutate those with a True value. 
-    Masking means replacing a residue with '<mask>'.
-    Returns a list of sequences (strings).
+def generate_all_maskings(sequences : List[str], mutateable_list : List[bool], mut_distance=1) -> List[str]]:
     
-    """
     masked_sequences = []
     
     for sequence in sequences:
@@ -81,7 +77,7 @@ def generate_all_maskings(sequences, mutateable_list, mut_distance=1):
     else:
         return generate_all_maskings(masked_sequences, mutateable_list, mut_distance=mut_distance-1)
     
-def get_masking(sequence, mutateable_list, mut_distance=1):
+def get_masking(sequence : List[str], mutateable_list : List[bool], mut_distance=1) -> str:
     """
     Return a sequence with mut_distance number of <mask> tokens. Only mutate those with a True value.
     """
