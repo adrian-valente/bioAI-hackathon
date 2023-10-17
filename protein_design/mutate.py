@@ -9,12 +9,12 @@ import numpy as np
 import random
 from transformers import  AutoTokenizer, AutoModel
 
-def numbering_to_chains(numbering):
+def numbering_to_chains(numbering) -> List[str]:
     """
     Takes the output of anarci.anarci and returns a list of heavy and light chains seperated by a '/'.
     """
     sequences = numbering[0]
-    sepereated_sequences = []
+    seperated_sequences = []
     for sequence in sequences:
         heavy_light = []
         for chain in sequence:
@@ -25,8 +25,8 @@ def numbering_to_chains(numbering):
                     heavy_light.append(residue)
             heavy_light.append('/')
         heavy_light = "".join(heavy_light[:-1])
-        sepereated_sequences.append(heavy_light)
-    return sepereated_sequences
+        seperated_sequences.append(heavy_light)
+    return seperated_sequences
 
 def masked_sequences_to_mutated_sequences(masked_sequences : List[str], model : AutoModel, tokenizer : AutoTokenizer) -> List[str]:
     """
@@ -55,7 +55,7 @@ def masked_sequences_to_mutated_sequences(masked_sequences : List[str], model : 
         mutated_sequences.append(mutated_sequence)
     return mutated_sequences
 
-def generate_all_maskings(sequences : List[str], mutateable_list : List[bool], mut_distance=1) -> List[str]]:
+def generate_all_maskings(sequences : List[str], mutateable_list : List[bool], mut_distance=1) -> List[str]:
     
     masked_sequences = []
     
